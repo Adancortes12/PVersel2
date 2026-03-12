@@ -1,66 +1,34 @@
-import mysql from "mysql2/promise";
+let reportes = [];
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
 
-  const connection = await mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-  });
+if(req.method === "POST"){
 
-  // GUARDAR REPORTE
-  if (req.method === "POST") {
+const data = req.body;
 
-    try {
+const nuevoReporte = {
+id: reportes.length + 1,
+id_vehiculo: data.id_vehiculo,
+fecha: data.fecha,
+latitud: data.latitud,
+longitud: data.longitud,
+descripcion_falla: data.descripcion_falla,
+firma_conductor_base64: data.firma_conductor_base64
+};
 
-      const {
-        id_vehiculo,
-        fecha,
-        latitud,
-        longitud,
-        descripcion_falla,
-        firma_conductor_base64
-      } = req.body;
+reportes.push(nuevoReporte);
 
-      const [result] = await connection.execute(
-        `INSERT INTO reportes 
-        (id_vehiculo,fecha,latitud,longitud,descripcion_falla,firma_conductor_base64)
-        VALUES (?,?,?,?,?,?)`,
-        [
-          id_vehiculo,
-          fecha,
-          latitud,
-          longitud,
-          descripcion_falla,
-          firma_conductor_base64
-        ]
-      );
+return res.status(201).json({
+id: nuevoReporte.id
+});
 
-      res.status(201).json({
-        id: result.insertId,
-        mensaje: "Reporte guardado correctamente"
-      });
+}
 
-    } catch (error) {
+if(req.method === "GET"){
 
-      res.status(500).json({
-        error: error.message
-      });
+return res.status(200).json(reportes);
 
-    }
+}
 
-  }
-
-  // OBTENER REPORTES
-  if (req.method === "GET") {
-
-    const [rows] = await connection.execute(
-      "SELECT * FROM reportes ORDER BY id DESC"
-    );
-
-    res.status(200).json(rows);
-
-  }
-
+res.status(405).json({error:"Metodo no permitido"});
 }

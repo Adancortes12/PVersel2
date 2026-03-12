@@ -2,79 +2,79 @@
 <html>
 
 <head>
-    <title>Reportes de Fallas</title>
 
-    <style>
-        body {
-            font-family: Arial;
-            padding: 40px;
-            background: #f4f4f4;
-        }
+<title>Reportes de Fallas</title>
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            background: white;
-        }
+<style>
 
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
+body{
+font-family: Arial;
+padding:40px;
+background:#f4f4f4;
+}
 
-        th {
-            background: #222;
-            color: white;
-        }
+table{
+border-collapse: collapse;
+width:100%;
+background:white;
+}
 
-        img {
-            border: 1px solid #ccc;
-        }
-    </style>
+th,td{
+border:1px solid #ccc;
+padding:10px;
+}
+
+th{
+background:#222;
+color:white;
+}
+
+img{
+border:1px solid #ccc;
+}
+
+</style>
 
 </head>
 
 <body>
 
-    <h1>Reportes de Falla Recibidos</h1>
+<h1>Reportes de Falla Recibidos</h1>
 
-    <table id="tabla">
+<table id="tabla">
 
-        <thead>
-            <tr>
+<thead>
 
-                <th>ID</th>
-                <th>Vehiculo</th>
-                <th>Fecha</th>
-                <th>Latitud</th>
-                <th>Longitud</th>
-                <th>Descripcion</th>
-                <th>Firma</th>
+<tr>
+<th>ID</th>
+<th>Vehiculo</th>
+<th>Fecha</th>
+<th>Latitud</th>
+<th>Longitud</th>
+<th>Descripcion</th>
+<th>Firma</th>
+</tr>
 
-            </tr>
-        </thead>
+</thead>
 
-        <tbody></tbody>
+<tbody></tbody>
 
-    </table>
+</table>
 
-    <script>
+<script>
 
-        async function cargarReportes() {
+async function cargar(){
 
-            const response = await fetch("/api/reports")
+const res = await fetch("/api/reports");
+const data = await res.json();
 
-            const data = await response.json()
+const tabla = document.querySelector("#tabla tbody");
 
-            const tabla = document.querySelector("#tabla tbody")
+tabla.innerHTML="";
 
-            tabla.innerHTML = ""
+data.forEach(r=>{
 
-            data.forEach(r => {
-
-                tabla.innerHTML += `
+tabla.innerHTML += `
 
 <tr>
 
@@ -96,16 +96,15 @@
 
 </tr>
 
-`
+`;
 
-            })
+});
 
-        }
+}
 
-        cargarReportes()
+setInterval(cargar,2000);
 
-    </script>
+</script>
 
 </body>
-
 </html>
