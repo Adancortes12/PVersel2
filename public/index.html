@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Reportes de Fallas</title>
+
+<style>
+
+body{
+font-family: Arial;
+padding:40px;
+}
+
+table{
+border-collapse: collapse;
+width:100%;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:8px;
+text-align:left;
+}
+
+th{
+background:#eee;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Reportes de Falla Recibidos</h1>
+
+<table id="tabla">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Vehiculo</th>
+<th>Fecha</th>
+<th>Lat</th>
+<th>Long</th>
+<th>Descripcion</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+<script>
+
+fetch("/api/reports")
+.then(res=>res.json())
+.then(data=>{
+
+const tabla = document.querySelector("#tabla tbody")
+
+data.forEach(r=>{
+
+tabla.innerHTML += `
+<tr>
+<td>${r.id}</td>
+<td>${r.id_vehiculo}</td>
+<td>${r.fecha}</td>
+<td>${r.latitud}</td>
+<td>${r.longitud}</td>
+<td>${r.descripcion_falla}</td>
+</tr>
+`
+
+})
+
+})
+
+</script>
+
+</body>
+
+</html>
